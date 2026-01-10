@@ -74,5 +74,84 @@
                 </form>
             @endif
         @endif
+
+        <!-- Comments Section -->
+        <hr class="my-8">
+
+        <h2 class="text-xl font-semibold mb-4">Comments</h2>
+
+        @foreach($assignment->comments as $comment)
+            <div class="border p-3 mb-3 rounded" id="comment-{{ $comment->id }}">
+                <strong>{{ $comment->user->username }}</strong>
+                <span class="text-sm text-gray-500">
+                    {{ $comment->created_at->diffForHumans() }}
+                </span>
+
+                <!-- Comment text -->
+                <p class="mt-2 comment-text">
+                    {{ $comment->body }}
+                </p>
+
+                @if(auth()->id() === $comment->user_id)
+                    <!-- Edit form (hidden by default) -->
+                    <form method="POST" action="{{ route('comments.update', $comment) }}" class="mt-2 comment-edit-form" style="display: none;">
+                        @csrf
+                        @method('PATCH')
+
+                        <textarea name="body" rows="2">{{ $comment->body }}</textarea>
+
+                        <div class="mt-1">
+                            <button type="submit">Save</button>
+                            <button type="button" onclick="cancelEdit({{ $comment->id }})">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Action buttons -->
+                    <div class="mt-2 comment-actions">
+                        <button type="button" onclick="editComment({{ $comment->id }})">
+                            Edit
+                        </button>
+
+                        <form method="POST" action="{{ route('comments.destroy', $comment) }}" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+
+                            <button type="submit" onclick="return confirm('Delete this comment?')">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                @endif
+            </div>
+        @endforeach
+
+        <!-- Student Comment Form -->
+        @if(auth()->user()->role === 'student') 
+            <form method="POST" action="{{ route('comments.store', $assignment) }}">
+                @csrf
+                <textarea name="body" rows="3" required placeholder="Write a comment..."></textarea>
+                <button type="submit" class="mt-2">
+                    Post Comment
+                </button>
+            </form>
+        @endif
     </div>
+
+    <script>
+        function editComment(id) {
+            const container = document.getElementById(`comment-${id}`);
+            container.querySelector('.comment-text').style.display = 'none';
+            container.querySelector('.comment-actions').style.display = 'none';
+            container.querySelector('.comment-edit-form').style.display = 'block';
+        }
+
+        function cancelEdit(id) {
+            const container = document.getElementById(`comment-${id}`);
+            container.querySelector('.comment-text').style.display = 'block';
+            container.querySelector('.comment-actions').style.display = 'block';
+            container.querySelector('.comment-edit-form').style.display = 'none';
+        }
+    </script>
 </x-app-layout>

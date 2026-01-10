@@ -15,9 +15,21 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('classrooms.index')" :active="request()->routeIs('classrooms.index')">
-                        {{ __('Classrooms') }}
-                    </x-nav-link>
+                    <!-- Teacher/Student Navigation -->
+                    @if(auth()->user()->role === 'teacher' || auth()->user()->role === 'student')
+                        <x-nav-link :href="route('classrooms.index')" :active="request()->routeIs('classrooms.index')">
+                            {{ __('Classrooms') }}
+                        </x-nav-link>
+                    @endif
+                    <!-- Admin Navigation -->
+                     @if(auth()->user()->role === 'admin')
+                        <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
+                            {{ __('Users') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.history.index')" :active="request()->routeIs('admin.history.*')">
+                            {{ __('History') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -73,9 +85,21 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('classrooms.index')" :active="request()->routeIs('classrooms.index')">
-                {{ __('Classrooms') }}
-            </x-responsive-nav-link>
+            <!-- Teacher/Student Navigation -->
+            @if(auth()->user()->role === 'teacher' || auth()->user()->role === 'student')
+                <x-responsive-nav-link :href="route('classrooms.index')" :active="request()->routeIs('classrooms.index')">
+                    {{ __('Classrooms') }}
+                </x-responsive-nav-link>
+            @endif
+            <!-- Admin Navigation -->
+            @if(auth()->user()->role === 'admin')
+                <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
+                    {{ __('Users') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.history.index')" :active="request()->routeIs('admin.history.*')">
+                    {{ __('History') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

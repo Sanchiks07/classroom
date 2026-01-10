@@ -56,5 +56,7 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
             'role' => 'student',
         ]);
+
+        $this->call(ClassroomAssignmentSeeder::class);
     }
 }

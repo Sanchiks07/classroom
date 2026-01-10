@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Models\Submission;
 use App\Models\Assignment;
+use App\Models\ActionLog;
 
 class SubmissionController extends Controller
 {
@@ -18,10 +20,19 @@ class SubmissionController extends Controller
         $filePath = $uploadedFile->store('submissions');
         $fileName = $uploadedFile->getClientOriginalName();
 
-        $assignment->submissions()->create([
+        $submission = $assignment->submissions()->create([
             'student_id' => auth()->id(),
             'file_path' => $filePath,
             'file_name' => $fileName,
+        ]);
+
+        // Action log
+        ActionLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'submitted',
+            'target_type' => 'Submission',
+            'target_id' => $submission->id,
+            'description' => 'Submitted file "' . $fileName . '" for assignment "' . $assignment->title . '"',
         ]);
 
         return back();
@@ -39,6 +50,15 @@ class SubmissionController extends Controller
             'feedback' => $request->feedback,
         ]);
 
+        // Action log
+        ActionLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'graded',
+            'target_type' => 'Submission',
+            'target_id' => $submission->id,
+            'description' => 'Graded submission "' . $submission->file_name . '" for assignment "' . $submission->assignment->title . '" with grade "' . $request->grade . '"',
+        ]);
+
         return back();
     }
 
@@ -53,6 +73,15 @@ class SubmissionController extends Controller
         }
 
         $submission->delete();
+
+        // Action log
+        ActionLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'deleted',
+            'target_type' => 'Submission',
+            'target_id' => $submission->id,
+            'description' => 'Deleted submission "' . $submission->file_name . '" for assignment "' . $submission->assignment->title . '"',
+        ]);
 
         return back()->with('success', 'Submission deleted successfully.');
     }
