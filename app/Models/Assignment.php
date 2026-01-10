@@ -13,8 +13,13 @@ class Assignment extends Model
         'classroom_id',
         'title',
         'description',
+        'due_date',
         'file_path',
         'file_name',
+    ];
+
+    protected $casts = [
+        'due_date' => 'date',
     ];
 
     public function classroom()

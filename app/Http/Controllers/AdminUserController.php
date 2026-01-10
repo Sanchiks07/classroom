@@ -32,10 +32,10 @@ class AdminUserController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'username' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
-            'role' => 'required',
+            'username' => 'required|string|max:255|unique:users,username',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8|confirmed',
+            'role' => 'required|in:student,teacher,admin',
         ]);
 
         $data['password'] = bcrypt($data['password']);
@@ -61,17 +61,22 @@ class AdminUserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        $data = $request->validate([
-            'username' => 'required',
+        $rules = [
+            'username' => 'required|string|max:255|unique:users,username',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|min:6',
-            'role' => 'required',
-        ]);
+            'role' => 'required|in:student,teacher,admin',
+        ];
 
-        if ($data['password']) {
-            $data['password'] = bcrypt($data['password']);
-        } else {
-            unset($data['password']);
+        // Only add password rules if password is filled
+        if ($request->filled('password')) {
+            $rules['password'] = 'min:8|confirmed';
+        }
+
+        $data = $request->validate($rules);
+
+        // Hash password only if provided
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password);
         }
 
         $user->update($data);

@@ -17,7 +17,7 @@
                     </x-nav-link>
                     <!-- Teacher/Student Navigation -->
                     @if(auth()->user()->role === 'teacher' || auth()->user()->role === 'student')
-                        <x-nav-link :href="route('classrooms.index')" :active="request()->routeIs('classrooms.index')">
+                        <x-nav-link :href="route('classrooms.index')" :active="request()->routeIs('classrooms.*')">
                             {{ __('Classrooms') }}
                         </x-nav-link>
                     @endif
@@ -88,7 +88,7 @@
             </x-responsive-nav-link>
             <!-- Teacher/Student Navigation -->
             @if(auth()->user()->role === 'teacher' || auth()->user()->role === 'student')
-                <x-responsive-nav-link :href="route('classrooms.index')" :active="request()->routeIs('classrooms.index')">
+                <x-responsive-nav-link :href="route('classrooms.index')" :active="request()->routeIs('classrooms.*')">
                     {{ __('Classrooms') }}
                 </x-responsive-nav-link>
             @endif

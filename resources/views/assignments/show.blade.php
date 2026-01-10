@@ -2,61 +2,72 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="container mx-auto p-6">
-                    <!-- Assignment Header & Info -->
-                    <div class="border p-4 rounded mb-6" id="assignment-{{ $assignment->id }}">
-                        <!-- Title -->
-                        <h1 class="text-2xl font-bold mb-6 assignment-title">{{ $assignment->title }}</h1>
+                <div class="container mx-auto p-6 space-y-8">
 
-                        <!-- Description -->
-                        <p class="mb-2 assignment-description">{{ $assignment->description }}</p>
+                    <!-- Assignment Card -->
+                    <div class="rounded-lg" id="assignment-{{ $assignment->id }}">
+                        <h1 class="text-2xl font-bold mb-3 assignment-title">{{ $assignment->title }}</h1>
+                        <p class="text-gray-700 mb-2 assignment-description">{{ $assignment->description }}</p>
 
-                        <!-- File (if exists) -->
+                        @if($assignment->due_date)
+                            <p class="text-gray-500 mb-2 assignment-due-date"><strong>Due:</strong> {{ $assignment->due_date->format('F j, Y') }}</p>
+                        @endif
+
                         @if($assignment->file_path)
-                            <p class="assignment-file">
-                                {{ $assignment->file_name ?? 'Download' }} - 
-                                <a href="{{ route('assignments.download', $assignment) }}" class="text-blue-600 underline">
-                                    Download
+                            <p class="text-blue-600 underline mb-2 assignment-file">
+                                <a href="{{ route('assignments.download', $assignment) }}">
+                                    {{ $assignment->file_name ?? 'Download File' }}
                                 </a>
                             </p>
                         @endif
 
-                        <!-- Edit Form (hidden by default, only teachers can see/edit) -->
+                        <!-- Edit Form (Teachers Only) -->
                         @if(auth()->user()->role === 'teacher')
-                            <form method="POST" action="{{ route('assignments.update', $assignment) }}" class="assignment-edit-form mt-2" style="display: none;" enctype="multipart/form-data">
+                            <form method="POST" action="{{ route('assignments.update', $assignment) }}" 
+                                class="assignment-edit-form rounded-lg space-y-3 max-w-2xl hidden"
+                                enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
 
-                                <input type="text" name="title" value="{{ $assignment->title }}" class="border rounded px-1 py-0.5 w-full mb-2" placeholder="Title">
+                                <input type="text" name="title" value="{{ $assignment->title }}"
+                                    class="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-200 focus:outline-none" placeholder="Title">
 
-                                <textarea name="description" rows="3" class="border rounded px-1 py-0.5 w-full mb-2" placeholder="Description">{{ $assignment->description }}</textarea>
+                                <textarea name="description" rows="3" 
+                                    class="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-200 focus:outline-none resize-none" 
+                                    placeholder="Description">{{ $assignment->description }}</textarea>
 
-                                <input type="file" name="file_path" class="mb-2">
+                                <input type="date" name="due_date" value="{{ $assignment->due_date?->format('Y-m-d') }}"
+                                    class="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-200 focus:outline-none">
 
-                                <!-- If a file already exists, show download link in the edit form as well -->
+                                <input type="file" name="file_path" class="w-full text-sm text-gray-600">
+
                                 @if($assignment->file_path)
-                                    <p class="text-sm mb-2">
-                                        Current file: {{ $assignment->file_name ?? 'Download' }} - 
+                                    <p class="text-sm">
+                                        Current file: 
                                         <a href="{{ route('assignments.download', $assignment) }}" class="text-blue-600 underline">
-                                            Download
+                                            {{ $assignment->file_name ?? 'Download' }}
                                         </a>
                                     </p>
                                 @endif
 
-                                <div class="space-x-2">
-                                    <button type="submit" class="text-green-500 hover:underline">Save</button>
-                                    <button type="button" onclick="cancelAssignmentEdit({{ $assignment->id }})" class="text-gray-500 hover:underline">Cancel</button>
+                                <div class="flex gap-2 mt-1">
+                                    <button type="submit" class="text-green-600 hover:underline font-medium">
+                                        Save
+                                    </button>
+                                    <button type="button" onclick="cancelAssignmentEdit({{ $assignment->id }})" class="text-gray-500 hover:underline font-medium">
+                                        Cancel
+                                    </button>
                                 </div>
                             </form>
 
-                            <!-- Action Buttons (only for teachers) -->
-                            <div class="mt-2 assignment-actions space-x-2">
-                                <button type="button" onclick="editAssignment({{ $assignment->id }})" class="text-blue-500 hover:underline">Edit</button>
+                            <!-- Action Buttons -->
+                            <div class="flex gap-2 mt-3 assignment-actions">
+                                <button type="button" onclick="editAssignment({{ $assignment->id }})" class="text-blue-500 hover:underline font-medium">Edit</button>
 
-                                <form action="{{ route('assignments.destroy', $assignment) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this assignment?')">
+                                <form action="{{ route('assignments.destroy', $assignment) }}" method="POST" onsubmit="return confirm('Delete this assignment?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-500 hover:underline">Delete</button>
+                                    <button type="submit" class="text-red-500 hover:underline font-medium">Delete</button>
                                 </form>
                             </div>
                         @endif
@@ -64,28 +75,34 @@
 
                     <!-- Teacher: Submissions Grading -->
                     @if(auth()->user()->role === 'teacher')
-                        <h2 class="text-xl font-semibold mt-6 mb-2">Student Submissions</h2>
+                        <h2 class="text-xl font-semibold">Student Submissions</h2>
+                        <div class="space-y-4">
+                            @forelse($assignment->submissions as $submission)
+                                <div class="rounded-lg">
+                                    <div class="flex justify-between items-center">
+                                        <span class="font-medium">{{ $submission->student->username }}</span>
+                                        <span class="text-gray-500 text-sm">{{ $submission->file_name }}</span>
+                                    </div>
 
-                        @forelse($assignment->submissions as $submission)
-                            <div class="mb-4 p-2 border rounded">
-                                <strong>{{ $submission->student->username }}</strong>  
-                                <span class="ml-2">{{ $submission->file_name }}</span>
-                                <a href="{{ route('submissions.download', $submission) }}" class="text-blue-600 underline">
-                                    Download
-                                </a>
+                                    <a href="{{ route('submissions.download', $submission) }}" class="text-blue-600 underline mt-1 inline-block">
+                                        Download
+                                    </a>
 
-                                <form method="POST" action="{{ route('submissions.grade', $submission) }}" class="mt-2">
-                                    @csrf
+                                    <form method="POST" action="{{ route('submissions.grade', $submission) }}" class="mt-3 space-y-2">
+                                        @csrf
 
-                                    <input type="number" min="1" name="grade" placeholder="Grade" value="{{ $submission->grade }}">
-                                    <textarea name="feedback" placeholder="Feedback">{{ $submission->feedback }}</textarea>
-
-                                    <button type="submit">Save</button>
-                                </form>
-                            </div>
-                        @empty
-                            <p>No submissions yet.</p>
-                        @endforelse
+                                        <input type="number" min="1" max="10" name="grade" placeholder="Grade" value="{{ $submission->grade }}" class="w-full sm:w-24 border rounded-md px-2 py-1 focus:ring-2 focus:ring-blue-200 focus:outline-none"><br>
+                                        <textarea name="feedback" placeholder="Feedback" rows="3" class="w-full sm:w-1/2 border rounded-md px-2 py-1 focus:ring-2 focus:ring-blue-200 focus:outline-none">{{ $submission->feedback }}</textarea><br>
+                                        
+                                        <button type="submit" class="text-green-600 hover:underline font-medium">
+                                            Save
+                                        </button>
+                                    </form>
+                                </div>
+                            @empty
+                                <p>No submissions yet.</p>
+                            @endforelse
+                        </div>
                     @endif
 
                     <!-- Student: Submit Assignment -->
@@ -95,13 +112,13 @@
                         @endphp
 
                         @if($mySubmission)
-                            <div class="mb-4 p-2 border rounded">
-                                <strong>Your Submission:</strong> {{ $mySubmission->file_name }}<br>
-
-                                <span class="block mt-1">Grade: {{ $mySubmission->grade ?? 'Not graded yet' }}</span>
-                                <span class="block mt-1">Feedback: {{ $mySubmission->feedback ?? 'No feedback yet' }}</span>
-
-                                <div class="flex items-center space-x-4 mt-2">
+                            <div class="rounded-lg">
+                                <strong>Your Submission:</strong> {{ $mySubmission->file_name ?? 'N/A' }}
+                                <div class="mt-1 text-sm text-gray-600">
+                                    Grade: {{ $mySubmission->grade ?? 'Not graded yet' }}<br>
+                                    Feedback: {{ $mySubmission->feedback ?? 'No feedback yet' }}
+                                </div>
+                                <div class="flex flex-col sm:flex-row gap-2 mt-2">
                                     <a href="{{ route('submissions.download', $mySubmission) }}" class="text-blue-600 underline">
                                         Download
                                     </a>
@@ -110,81 +127,83 @@
                                         @csrf
                                         @method('DELETE')
 
-                                        <button type="submit" onclick="return confirm('Are you sure you want to delete this submission?')" class="inline-block ml-2">
+                                        <button type="submit" class="text-red-500 hover:underline">
                                             Delete
                                         </button>
                                     </form>
                                 </div>
                             </div>
                         @else
-                            <form method="POST" action="{{ route('submissions.store', $assignment) }}" enctype="multipart/form-data">
+                            <form method="POST" action="{{ route('submissions.store', $assignment) }}" enctype="multipart/form-data" class="p-4 rounded-lg flex flex-col gap-3 max-w-md">
                                 @csrf
 
-                                <input type="file" name="file" required>
+                                <input type="file" name="file" required class="border rounded-md px-2 py-1 focus:ring-2 focus:ring-blue-200 focus:outline-none">
                                 
-                                <button type="submit">Submit Assignment</button>
+                                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm shadow">
+                                    Submit Assignment
+                                </button>
                             </form>
                         @endif
                     @endif
 
                     <!-- Comments Section -->
                     <hr class="my-8">
+                    <h2 class="text-xl font-semibold">Comments</h2>
 
-                    <h2 class="text-xl font-semibold mb-4">Comments</h2>
-
-                    @foreach($assignment->comments as $comment)
-                        <div class="border p-3 mb-3 rounded" id="comment-{{ $comment->id }}">
-                            <strong>{{ $comment->user->username }}</strong>
-                            <span class="text-sm text-gray-500">
-                                {{ $comment->created_at->diffForHumans() }}
-                            </span>
-
-                            <!-- Comment text -->
-                            <p class="mt-2 comment-text">
-                                {{ $comment->body }}
-                            </p>
-
-                            @if(auth()->id() === $comment->user_id)
-                                <!-- Edit form (hidden by default) -->
-                                <form method="POST" action="{{ route('comments.update', $comment) }}" class="mt-2 comment-edit-form" style="display: none;">
-                                    @csrf
-                                    @method('PATCH')
-
-                                    <textarea name="body" rows="2">{{ $comment->body }}</textarea>
-
-                                    <div class="mt-1">
-                                        <button type="submit">Save</button>
-                                        <button type="button" onclick="cancelEdit({{ $comment->id }})">
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </form>
-
-                                <!-- Action buttons -->
-                                <div class="mt-2 comment-actions">
-                                    <button type="button" onclick="editComment({{ $comment->id }})">
-                                        Edit
-                                    </button>
-
-                                    <form method="POST" action="{{ route('comments.destroy', $comment) }}" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button type="submit" onclick="return confirm('Delete this comment?')">
-                                            Delete
-                                        </button>
-                                    </form>
+                    <div class="space-y-4">
+                        @foreach($assignment->comments as $comment)
+                            <div class="rounded-lg" id="comment-{{ $comment->id }}">
+                                <div class="flex items-center gap-2">
+                                    <strong>{{ $comment->user->username }}</strong>
+                                    <span class="text-sm text-gray-500">{{ $comment->created_at->diffForHumans() }}</span>
                                 </div>
-                            @endif
-                        </div>
-                    @endforeach
+
+                                <p class="mt-2 comment-text">{{ $comment->body }}</p>
+
+                                @if(auth()->id() === $comment->user_id)
+                                    <form method="POST" action="{{ route('comments.update', $comment) }}" class="comment-edit-form hidden">
+                                        @csrf
+                                        @method('PATCH')
+                                        
+                                        <textarea name="body" rows="3" class="w-full sm:w-1/2 border rounded-md px-2 py-1 focus:ring-2 focus:ring-blue-200 focus:outline-none">{{ $comment->body }}</textarea>
+                                        
+                                        <div class="flex gap-2 mt-1">
+                                            <button type="submit" class="text-green-600 hover:underline font-medium">
+                                                Save
+                                            </button>
+                                            <button type="button" onclick="cancelEdit({{ $comment->id }})" class="text-gray-500 hover:underline font-medium">
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </form>
+
+                                    <div class="flex gap-2 mt-2 comment-actions">
+                                        <button type="button" onclick="editComment({{ $comment->id }})" class="text-blue-500 hover:underline font-medium">
+                                            Edit
+                                        </button>
+                                        
+                                        <form method="POST" action="{{ route('comments.destroy', $comment) }}" class="inline">
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit" class="text-red-500 hover:underline font-medium">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
 
                     <!-- Student Comment Form -->
-                    @if(auth()->user()->role === 'student') 
-                        <form method="POST" action="{{ route('comments.store', $assignment) }}">
+                    @if(auth()->user()->role === 'student')
+                        <form method="POST" action="{{ route('comments.store', $assignment) }}" class="rounded-lg flex flex-col gap-2 max-w-md">
                             @csrf
-                            <textarea name="body" rows="3" required placeholder="Write a comment..."></textarea>
-                            <button type="submit" class="mt-2">
+
+                            <textarea name="body" rows="3" required placeholder="Write a comment..." class="w-full border rounded-md px-2 py-1 focus:ring-2 focus:ring-blue-200 focus:outline-none"></textarea>
+                            
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm shadow">
                                 Post Comment
                             </button>
                         </form>
@@ -194,43 +213,45 @@
         </div>
     </div>
 
-    <!-- Assignment Edit -->
     <script>
+        // Assignment edit toggle
         function editAssignment(id) {
             const container = document.getElementById(`assignment-${id}`);
             container.querySelector('.assignment-title').style.display = 'none';
             container.querySelector('.assignment-description').style.display = 'none';
+            const dueEl = container.querySelector('.assignment-due-date');
+            if(dueEl) dueEl.style.display = 'none';
             const fileEl = container.querySelector('.assignment-file');
             if(fileEl) fileEl.style.display = 'none';
             container.querySelector('.assignment-actions').style.display = 'none';
-            container.querySelector('.assignment-edit-form').style.display = 'block';
+            container.querySelector('.assignment-edit-form').classList.remove('hidden');
         }
 
         function cancelAssignmentEdit(id) {
             const container = document.getElementById(`assignment-${id}`);
             container.querySelector('.assignment-title').style.display = 'block';
             container.querySelector('.assignment-description').style.display = 'block';
+            const dueEl = container.querySelector('.assignment-due-date');
+            if(dueEl) dueEl.style.display = 'block';
             const fileEl = container.querySelector('.assignment-file');
             if(fileEl) fileEl.style.display = 'block';
             container.querySelector('.assignment-actions').style.display = 'flex';
-            container.querySelector('.assignment-edit-form').style.display = 'none';
+            container.querySelector('.assignment-edit-form').classList.add('hidden');
         }
-    </script>
 
-    <!-- Comment Edit -->
-    <script>
+        // Comment edit toggle
         function editComment(id) {
             const container = document.getElementById(`comment-${id}`);
             container.querySelector('.comment-text').style.display = 'none';
             container.querySelector('.comment-actions').style.display = 'none';
-            container.querySelector('.comment-edit-form').style.display = 'block';
+            container.querySelector('.comment-edit-form').classList.remove('hidden');
         }
 
         function cancelEdit(id) {
             const container = document.getElementById(`comment-${id}`);
             container.querySelector('.comment-text').style.display = 'block';
-            container.querySelector('.comment-actions').style.display = 'block';
-            container.querySelector('.comment-edit-form').style.display = 'none';
+            container.querySelector('.comment-actions').style.display = 'flex';
+            container.querySelector('.comment-edit-form').classList.add('hidden');
         }
     </script>
 </x-app-layout>

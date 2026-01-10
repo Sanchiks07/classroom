@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('classroom_id')->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->text('description');
+            $table->date('due_date')->nullable();
             $table->string('file_path')->nullable();
             $table->string('file_name')->nullable();
             $table->timestamps();

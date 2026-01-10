@@ -17,12 +17,14 @@ class AssignmentController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'due_date' => 'nullable|date',
             'file_path' => 'nullable|file',
         ]);
 
         $data = [
             'title' => $request->title,
             'description' => $request->description,
+            'due_date' => $request->due_date,
         ];
 
         if ($request->hasFile('file_path')) {
@@ -60,11 +62,13 @@ class AssignmentController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'due_date' => 'nullable|date',
             'file_path' => 'nullable|file',
         ]);
 
         $assignment->title = $request->title;
         $assignment->description = $request->description;
+        $assignment->due_date = $request->due_date;
 
         if ($request->hasFile('file_path')) {
             // Delete old file if exists
@@ -93,6 +97,8 @@ class AssignmentController extends Controller
 
     public function destroy(Assignment $assignment)
     {
+        $classroom = $assignment->classroom;
+        
         // Delete file if exists
         if ($assignment->file_path && \Storage::exists($assignment->file_path)) {
             \Storage::delete($assignment->file_path);
@@ -110,7 +116,7 @@ class AssignmentController extends Controller
             'description' => 'Deleted assignment: ' . $title,
         ]);
 
-        return back()->with('success', 'Assignment deleted successfully.');
+        return redirect()->route('classrooms.show', $classroom)->with('success', 'Assignment deleted successfully.');
     }
 
     public function download(Assignment $assignment)
