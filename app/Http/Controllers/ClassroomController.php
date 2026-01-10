@@ -45,6 +45,45 @@ class ClassroomController extends Controller
         return view('classrooms.show', compact('classroom'));
     }
 
+    public function update(Request $request, Classroom $classroom)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $classroom->update([
+            'name' => $request->name,
+        ]);
+
+        // Action log
+        ActionLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'updated',
+            'target_type' => 'Classroom',
+            'target_id' => $classroom->id,
+            'description' => 'Updated classroom name to "' . $classroom->name . '"',
+        ]);
+
+        return back();
+    }
+
+    public function destroy(Classroom $classroom)
+    {
+        $name = $classroom->name;
+        $classroom->delete();
+
+        // Action log
+        ActionLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'deleted',
+            'target_type' => 'Classroom',
+            'target_id' => $classroom->id,
+            'description' => 'Deleted classroom "' . $name . '"',
+        ]);
+
+        return back();
+    }
+
     public function join(Request $request)
     {
         $classroom = Classroom::where('code', $request->code)->firstOrFail();

@@ -1,16 +1,63 @@
 <x-app-layout>
     <div class="py-12 max-w-7xl mx-auto">
-        <h1 class="text-2xl font-bold mb-4">{{ $assignment->title }}</h1>
+        <!-- Assignment Header & Info -->
+        <div class="border p-4 rounded mb-6" id="assignment-{{ $assignment->id }}">
+            <!-- Title -->
+            <h1 class="text-2xl font-bold mb-2 assignment-title">{{ $assignment->title }}</h1>
 
-        <p class="mb-4">
-            {{ $assignment->description }}
-        </p>
+            <!-- Description -->
+            <p class="mb-2 assignment-description">{{ $assignment->description }}</p>
 
-        @if($assignment->file_path)
-            <p>
-                File: <a href="{{ Storage::url($assignment->file_path) }}" target="_blank">Download</a>
-            </p>
-        @endif
+            <!-- File (if exists) -->
+            @if($assignment->file_path)
+                <p class="assignment-file">
+                    {{ $assignment->file_name ?? 'Download' }} - 
+                    <a href="{{ route('assignments.download', $assignment) }}" class="text-blue-600 underline">
+                        Download
+                    </a>
+                </p>
+            @endif
+
+            <!-- Edit Form (hidden by default, only teachers can see/edit) -->
+            @if(auth()->user()->role === 'teacher')
+                <form method="POST" action="{{ route('assignments.update', $assignment) }}" class="assignment-edit-form mt-2" style="display: none;" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+
+                    <input type="text" name="title" value="{{ $assignment->title }}" class="border rounded px-1 py-0.5 w-full mb-2" placeholder="Title">
+
+                    <textarea name="description" rows="3" class="border rounded px-1 py-0.5 w-full mb-2" placeholder="Description">{{ $assignment->description }}</textarea>
+
+                    <input type="file" name="file_path" class="mb-2">
+
+                    <!-- If a file already exists, show download link in the edit form as well -->
+                    @if($assignment->file_path)
+                        <p class="text-sm mb-2">
+                            Current file: {{ $assignment->file_name ?? 'Download' }} - 
+                            <a href="{{ route('assignments.download', $assignment) }}" class="text-blue-600 underline">
+                                Download
+                            </a>
+                        </p>
+                    @endif
+
+                    <div class="space-x-2">
+                        <button type="submit" class="text-green-500 hover:underline">Save</button>
+                        <button type="button" onclick="cancelAssignmentEdit({{ $assignment->id }})" class="text-gray-500 hover:underline">Cancel</button>
+                    </div>
+                </form>
+
+                <!-- Action Buttons (only for teachers) -->
+                <div class="mt-2 assignment-actions space-x-2">
+                    <button type="button" onclick="editAssignment({{ $assignment->id }})" class="text-blue-500 hover:underline">Edit</button>
+
+                    <form action="{{ route('assignments.destroy', $assignment) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this assignment?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-red-500 hover:underline">Delete</button>
+                    </form>
+                </div>
+            @endif
+        </div>
 
         <!-- Teacher: Submissions Grading -->
         @if(auth()->user()->role === 'teacher')
@@ -19,8 +66,10 @@
             @forelse($assignment->submissions as $submission)
                 <div class="mb-4 p-2 border rounded">
                     <strong>{{ $submission->student->username }}</strong>  
-                    <span class="ml-2">| {{ $submission->file_name }}</span>
-                    <a href="{{ Storage::url($submission->file_path) }}" target="_blank" class="ml-2">Download</a>
+                    <span class="ml-2">{{ $submission->file_name }}</span>
+                    <a href="{{ route('submissions.download', $submission) }}" class="text-blue-600 underline">
+                        Download
+                    </a>
 
                     <form method="POST" action="{{ route('submissions.grade', $submission) }}" class="mt-2">
                         @csrf
@@ -50,7 +99,7 @@
                     <span class="block mt-1">Feedback: {{ $mySubmission->feedback ?? 'No feedback yet' }}</span>
 
                     <div class="flex items-center space-x-4 mt-2">
-                        <a href="{{ Storage::url($mySubmission->file_path) }}" target="_blank" class="ml-2">
+                        <a href="{{ route('submissions.download', $mySubmission) }}" class="text-blue-600 underline">
                             Download
                         </a>
 
@@ -139,6 +188,30 @@
         @endif
     </div>
 
+    <!-- Assignment Edit -->
+    <script>
+        function editAssignment(id) {
+            const container = document.getElementById(`assignment-${id}`);
+            container.querySelector('.assignment-title').style.display = 'none';
+            container.querySelector('.assignment-description').style.display = 'none';
+            const fileEl = container.querySelector('.assignment-file');
+            if(fileEl) fileEl.style.display = 'none';
+            container.querySelector('.assignment-actions').style.display = 'none';
+            container.querySelector('.assignment-edit-form').style.display = 'block';
+        }
+
+        function cancelAssignmentEdit(id) {
+            const container = document.getElementById(`assignment-${id}`);
+            container.querySelector('.assignment-title').style.display = 'block';
+            container.querySelector('.assignment-description').style.display = 'block';
+            const fileEl = container.querySelector('.assignment-file');
+            if(fileEl) fileEl.style.display = 'block';
+            container.querySelector('.assignment-actions').style.display = 'flex';
+            container.querySelector('.assignment-edit-form').style.display = 'none';
+        }
+    </script>
+
+    <!-- Comment Edit -->
     <script>
         function editComment(id) {
             const container = document.getElementById(`comment-${id}`);

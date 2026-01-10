@@ -14,6 +14,7 @@ class Assignment extends Model
         'title',
         'description',
         'file_path',
+        'file_name',
     ];
 
     public function classroom()

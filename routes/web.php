@@ -31,16 +31,22 @@ Route::get('/dashboard', function () {
 Route::get('/classrooms', [ClassroomController::class, 'index'])->name('classrooms.index');
 Route::post('/classrooms', [ClassroomController::class, 'store'])->name('classrooms.store');
 Route::get('/classrooms/{classroom}', [ClassroomController::class, 'show'])->name('classrooms.show');
+Route::put('/classrooms/{classroom}', [ClassroomController::class, 'update'])->name('classrooms.update');
+Route::delete('/classrooms/{classroom}', [ClassroomController::class, 'destroy'])->name('classrooms.destroy');
 Route::post('/classrooms/join', [ClassroomController::class, 'join'])->name('classrooms.join');
 
 // Assignment Routes
 Route::post('/classrooms/{classroom}/assignments', [AssignmentController::class, 'store'])->name('assignments.store');
 Route::get('/assignments/{assignment}', [AssignmentController::class, 'show'])->name('assignments.show');
+Route::put('/assignments/{assignment}', [AssignmentController::class, 'update'])->name('assignments.update');
+Route::delete('/assignments/{assignment}', [AssignmentController::class, 'destroy'])->name('assignments.destroy');
+Route::get('/assignments/{assignment}/download', [AssignmentController::class, 'download'])->name('assignments.download');
 
 // Submission Routes
 Route::post('/assignments/{assignment}/submit', [SubmissionController::class, 'store'])->name('submissions.store');
 Route::post('/submissions/{submission}/grade', [SubmissionController::class, 'grade'])->name('submissions.grade');
 Route::delete('/submissions/{submission}', [SubmissionController::class, 'destroy'])->name('submissions.destroy');
+Route::get('/submissions/{submission}/download', [SubmissionController::class, 'download'])->name('submissions.download');
 
 // Comment Routes
 Route::post('/assignments/{assignment}/comments', [CommentController::class, 'store'])->name('comments.store');
