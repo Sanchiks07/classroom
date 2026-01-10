@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\SubmissionController;
@@ -22,10 +23,8 @@ require __DIR__.'/auth.php';
 Route::get('/', function () {
     return view('auth.login');
 });
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Dashboard Route
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth')->name('dashboard');
 
 // Classroom Routes
 Route::get('/classrooms', [ClassroomController::class, 'index'])->name('classrooms.index');
