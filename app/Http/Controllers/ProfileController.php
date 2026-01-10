@@ -32,6 +32,18 @@ class ProfileController extends Controller
 
         $user->fill($request->validated());
 
+        // Handle profile photo
+        if ($request->hasFile('profile_photo')) {
+            $request->validate([
+                'profile_photo' => 'image|max:1024',
+            ]);
+
+            // Store the uploaded file in storage/app/public/profile-photos
+            $path = $request->file('profile_photo')->store('profile-photos', 'public');
+
+            $user->profile_photo_path = $path;
+        }
+
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }

@@ -7,7 +7,7 @@
             <!-- Username -->
             <div class="mb-4">
                 <label for="username" class="block text-gray-700 font-medium">{{ __('Username') }}</label>
-                <input id="username" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm" type="text" name="username" value="{{ old('username', $user->username) }}" required autofocus>
+                <input id="username" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm" type="text" name="username" value="{{ old('username', $user->username) }}" required>
                 
                 @error('username')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
