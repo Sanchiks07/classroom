@@ -9,6 +9,7 @@ use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AdminHistoryController;
+use App\Http\Controllers\CalendarController;
 
 require __DIR__.'/auth.php';
 
@@ -63,3 +64,6 @@ Route::prefix('admin')->group(function () {
 
     Route::get('/history', [AdminHistoryController::class, 'index'])->name('admin.history.index');
 });
+
+// Calendar route
+Route::get('/calendar/{month?}/{year?}', [CalendarController::class, 'index'])->name('calendar.index');

@@ -30,6 +30,9 @@
                         <x-nav-link :href="route('classrooms.index')" :active="request()->routeIs('classrooms.*')" class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
                             {{ __('Classrooms') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('calendar.index')" :active="request()->routeIs('calendar.*')" class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
+                            {{ __('Calendar') }}
+                        </x-nav-link>
                     @endif
 
                     @if(auth()->user()->role === 'admin')
@@ -68,8 +71,7 @@
                             <div class="w-8 h-8 rounded-full bg-white p-0.5 me-2 flex items-center justify-center">
                                 <img
                                     src="{{ Auth::user()->profile_photo_path ? asset('storage/' . Auth::user()->profile_photo_path) : asset('images/default-avatar.png') }}"
-                                    alt="{{ Auth::user()->username }}"
-                                    class="w-full h-full rounded-full object-cover"
+                                    alt="{{ Auth::user()->username }}" class="w-full h-full rounded-full object-cover"
                                 >
                             </div>
 
@@ -91,9 +93,7 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
-                            <x-dropdown-link
-                                :href="route('logout')"
-                                onclick="event.preventDefault(); this.closest('form').submit();"
+                            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();"
                                 class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
                             >
                                 {{ __('Log Out') }}
@@ -118,38 +118,26 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link 
-                :href="route('dashboard')" 
-                :active="request()->routeIs('dashboard')" 
-                class="text-gray-600 dark:text-gray-200 dark:hover:text-white dark:hover:bg-gray-800"
-            >
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-gray-600 dark:text-gray-200 dark:hover:text-white dark:hover:bg-gray-800">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
 
             @if(auth()->user()->role === 'teacher' || auth()->user()->role === 'student')
-                <x-responsive-nav-link
-                    :href="route('classrooms.index')"
-                    :active="request()->routeIs('classrooms.*')"
-                    class="text-gray-600 dark:text-gray-200 dark:hover:text-white dark:hover:bg-gray-800"
-                >
+                <x-responsive-nav-link :href="route('classrooms.index')" :active="request()->routeIs('classrooms.*')" class="text-gray-600 dark:text-gray-200 dark:hover:text-white dark:hover:bg-gray-800">
                     {{ __('Classrooms') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('calendar.index')" :active="request()->routeIs('calendar.*')" class="text-gray-600 dark:text-gray-200 dark:hover:text-white dark:hover:bg-gray-800">
+                    {{ __('Calendar') }}
                 </x-responsive-nav-link>
             @endif
 
             @if(auth()->user()->role === 'admin')
-                <x-responsive-nav-link 
-                    :href="route('admin.users.index')" 
-                    :active="request()->routeIs('admin.users.*')" 
-                    class="text-gray-600 dark:text-gray-200 dark:hover:text-white dark:hover:bg-gray-800"
-                >
+                <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')" class="text-gray-600 dark:text-gray-200 dark:hover:text-white dark:hover:bg-gray-800">
                     {{ __('Users') }}
                 </x-responsive-nav-link>
 
                 <x-responsive-nav-link 
-                    :href="route('admin.history.index')" 
-                    :active="request()->routeIs('admin.history.*')" 
-                    class="text-gray-600 dark:text-gray-200 dark:hover:text-white dark:hover:bg-gray-800"
-                >
+                    :href="route('admin.history.index')" :active="request()->routeIs('admin.history.*')" class="text-gray-600 dark:text-gray-200 dark:hover:text-white dark:hover:bg-gray-800">
                     {{ __('History') }}
                 </x-responsive-nav-link>
             @endif
@@ -161,8 +149,7 @@
                 <div class="w-8 h-8 rounded-full bg-white p-0.5 me-2 flex items-center justify-center">
                     <img
                         src="{{ Auth::user()->profile_photo_path ? asset('storage/' . Auth::user()->profile_photo_path) : asset('images/default-avatar.png') }}"
-                        alt="{{ Auth::user()->username }}"
-                        class="w-full h-full rounded-full object-cover"
+                        alt="{{ Auth::user()->username }}" class="w-full h-full rounded-full object-cover"
                     >
                 </div>
                 
@@ -176,19 +163,12 @@
 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <x-responsive-nav-link
-                        :href="route('logout')"
-                        onclick="event.preventDefault(); this.closest('form').submit();"
-                        class="text-gray-600 dark:text-gray-200 dark:hover:text-white dark:hover:bg-gray-800"
-                    >
+                    <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" class="text-gray-600 dark:text-gray-200 dark:hover:text-white dark:hover:bg-gray-800">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>
 
-                <button
-                    @click="dark = !dark"
-                    class="w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition"
-                >
+                <button @click="dark = !dark" class="w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition">
                     Toggle Dark Mode
                 </button>
             </div>
