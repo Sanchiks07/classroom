@@ -17,9 +17,15 @@ class AdminUserController extends Controller
         }
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
+        $users = User::query()
+            ->when($request->input('search'), function($query, $search) {
+                $query->where('username', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('role', 'like', "%{$search}%");
+            })
+            ->get();
 
         return view('admin.users.index', compact('users'));
     }

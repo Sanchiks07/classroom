@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg sm:rounded-lg">
                 <div class="container mx-auto p-6 sm:px-4">
                     <form method="POST" action="{{ route('admin.users.store') }}" class="space-y-4 sm:max-w-md lg:max-w-full sm:mx-auto">
                         @csrf

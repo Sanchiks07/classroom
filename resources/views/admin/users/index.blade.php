@@ -1,13 +1,46 @@
 <x-app-layout>
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg sm:rounded-lg">
                 <div class="container mx-auto p-6">
-                    <div class="flex justify-between items-center mb-6">
+                    <!-- BIG SCREEN -->
+                    <div class="hidden lg:flex justify-between items-center mb-6">
                         <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-200">Users</h1>
-                        <a href="{{ route('admin.users.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md shadow font-semibold">
-                            Add User
-                        </a>
+
+                        <div class="flex items-center gap-8">
+                            <form method="GET" action="{{ route('admin.users.index') }}" class="flex items-center gap-2">
+                                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search users..."
+                                        class="border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1.5 focus:ring-2 focus:ring-blue-200 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm h-9 w-auto">
+
+                                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm font-medium shadow h-9 flex items-center justify-center">
+                                    <img src="/images/search.png" class="h-5 w-5">
+                                </button>
+                            </form>
+
+                            <a href="{{ route('admin.users.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md shadow font-semibold h-10 flex items-center justify-center">
+                                Add User
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- SMALL SCREEN -->
+                    <div class="flex flex-col lg:hidden mb-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-200">Users</h1>
+
+                            <a href="{{ route('admin.users.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md shadow font-semibold h-10 flex items-center justify-center">
+                                Add User
+                            </a>
+                        </div>
+
+                        <form method="GET" action="{{ route('admin.users.index') }}" class="flex items-center gap-2 w-full">
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search users..."
+                                    class="mt-3 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-200 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm w-full">
+                            
+                            <button type="submit" class="mt-3 min-w-[3rem] bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md text-sm font-medium shadow flex items-center justify-center">
+                                <img src="/images/search.png" class="h-5 w-5">
+                            </button>
+                        </form>
                     </div>
 
                     @if($users->count())

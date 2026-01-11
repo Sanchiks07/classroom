@@ -1,16 +1,16 @@
 <x-app-layout>
     <div class="py-8 sm:py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg sm:rounded-lg">
                 <div class="container mx-auto p-4 sm:p-6">
-                    <h1 class="text-xl sm:text-2xl font-bold mb-6 break-words text-gray-900 dark:text-gray-200">{{ $classroom->name }}</h1>
+                    <h1 class="text-2xl font-bold mb-3 assignment-title text-gray-900 dark:text-gray-200 break-words">{{ $classroom->name }}</h1>
 
-                    <p class="mb-2 text-sm sm:text-base text-gray-900 dark:text-gray-200">
+                    <p class="mb-2 sm:text-base text-gray-900 dark:text-gray-200">
                         <strong>Teacher:</strong> {{ $classroom->teacher->username }}
                     </p>
 
                     @if(auth()->user()->role === 'teacher')
-                        <p class="mb-4 text-sm sm:text-base break-all text-gray-900 dark:text-gray-200">
+                        <p class="mb-4 sm:text-base break-all text-gray-900 dark:text-gray-200">
                             <strong>Classroom code:</strong> 
 
                             <span class="font-allerta">

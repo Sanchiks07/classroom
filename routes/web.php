@@ -10,6 +10,12 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AdminHistoryController;
 
+require __DIR__.'/auth.php';
+
+Route::get('/', function () {
+    return view('auth.login');
+});
+
 // Profile Routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -17,12 +23,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
-
-
-Route::get('/', function () {
-    return view('auth.login');
-});
 // Dashboard Route
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth')->name('dashboard');
 

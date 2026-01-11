@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg sm:rounded-lg">
                 <div class="container mx-auto p-6">
                     <h1 class="text-2xl font-bold mb-8 text-center text-gray-800 dark:text-gray-200">Action Timeline</h1>
 

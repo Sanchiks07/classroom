@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg sm:rounded-lg">
                 <div class="container mx-auto p-6 space-y-8">
 
                     <!-- Assignment Card -->
@@ -45,11 +45,11 @@
                                 @endif
 
                                 <div class="flex gap-2 mt-1">
-                                    <button type="submit" class="text-green-600 hover:underline font-medium">
+                                    <button type="submit" class="text-green-600 hover:underline font-medium dark:text-green-500">
                                         Save
                                     </button>
 
-                                    <button type="button" onclick="cancelAssignmentEdit({{ $assignment->id }})" class="text-gray-500 hover:underline font-medium">
+                                    <button type="button" onclick="cancelAssignmentEdit({{ $assignment->id }})" class="text-gray-500 hover:underline font-medium dark:text-gray-400">
                                         Cancel
                                     </button>
                                 </div>
@@ -168,11 +168,11 @@
                                         <textarea name="body" rows="3" class="w-full sm:w-1/2 border rounded-md px-2 py-1 focus:ring-2 focus:ring-blue-200 focus:outline-none dark:bg-gray-700 dark:text-gray-200 max-h-40 resize-y overflow-auto">{{ $comment->body }}</textarea>
                                         
                                         <div class="flex gap-2 mt-1">
-                                            <button type="submit" class="text-green-600 hover:underline font-medium">
+                                            <button type="submit" class="text-green-600 hover:underline font-medium dark:text-green-500">
                                                 Save
                                             </button>
 
-                                            <button type="button" onclick="cancelEdit({{ $comment->id }})" class="text-gray-500 hover:underline font-medium">
+                                            <button type="button" onclick="cancelEdit({{ $comment->id }})" class="text-gray-500 hover:underline font-medium dark:text-gray-400">
                                                 Cancel
                                             </button>
                                         </div>
