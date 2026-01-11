@@ -1,17 +1,17 @@
 <x-app-layout>
     <div class="py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg sm:rounded-lg">
                 <div class="container mx-auto p-6">
                     <!-- Teacher View -->
                     @if(auth()->user()->role === 'teacher')
-                        <h1 class="text-2xl font-bold mb-6">Your Classrooms</h1>
+                        <h1 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-200">Your Classrooms</h1>
 
                         <!-- Teacher Create Classroom Form -->
                         <form method="POST" action="{{ route('classrooms.store') }}" class="mb-6 flex flex-wrap gap-2 items-start">
                             @csrf
 
-                            <input type="text" name="name" placeholder="Classroom name" class="border rounded px-3 py-2 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-blue-200" required>
+                            <input type="text" name="name" placeholder="Classroom name" class="border rounded px-3 py-2 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-gray-200" required>
 
                             <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded shadow w-full sm:w-auto">
                                 Create Classroom
@@ -20,10 +20,10 @@
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             @forelse($classrooms as $classroom)
-                                <div id="classroom-{{ $classroom->id }}" class="bg-white shadow-md rounded-lg p-4 flex flex-col items-center break-words">
+                                <div id="classroom-{{ $classroom->id }}" class="bg-white dark:bg-gray-700 shadow-md rounded-lg p-4 flex flex-col items-center break-words">
                                     <!-- Classroom Name -->
                                     <div class="classroom-name text-center">
-                                        <a href="{{ route('classrooms.show', $classroom) }}" class="font-bold hover:underline text-lg break-words">
+                                        <a href="{{ route('classrooms.show', $classroom) }}" class="font-bold hover:underline text-lg break-words text-gray-900 dark:text-gray-100">
                                             {{ $classroom->name }}
                                         </a>
                                     </div>
@@ -33,14 +33,14 @@
                                         @csrf
                                         @method('PUT')
 
-                                        <input type="text" name="name" value="{{ $classroom->name }}" class="border rounded px-2 py-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-400">
+                                        <input type="text" name="name" value="{{ $classroom->name }}" class="border rounded px-2 py-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
 
                                         <div class="flex justify-center flex-wrap gap-2 mt-4">
                                             <button type="submit" class="text-green-600 hover:underline font-semibold">
                                                 Save
                                             </button>
 
-                                            <button type="button" onclick="cancelClassroomEdit({{ $classroom->id }})" class="text-gray-500 hover:underline">
+                                            <button type="button" onclick="cancelClassroomEdit({{ $classroom->id }})" class="text-gray-500 hover:underline dark:text-gray-300">
                                                 Cancel
                                             </button>
                                         </div>
@@ -63,20 +63,20 @@
                                     </div>
                                 </div>
                             @empty
-                                <p>No classrooms yet.</p>
+                                <p class="text-gray-900 dark:text-gray-200">No classrooms yet.</p>
                             @endforelse
                         </div>
                     @endif
 
                     <!-- Student View -->
                     @if(auth()->user()->role === 'student')
-                        <h1 class="text-2xl font-bold mb-6">Your Classrooms</h1>
+                        <h1 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-200">Your Classrooms</h1>
 
                         <!-- Join Classroom Form -->
                         <form method="POST" action="{{ route('classrooms.join') }}" class="mb-6 flex flex-wrap gap-2 items-start">
                             @csrf
 
-                            <input type="text" name="code" placeholder="Classroom code" class="border rounded px-3 py-2 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-blue-200" required>
+                            <input type="text" name="code" placeholder="Classroom code" class="border rounded px-3 py-2 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-gray-200" required>
 
                             <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded shadow w-full sm:w-auto">
                                 Join Classroom
@@ -86,13 +86,13 @@
                         <!-- Classroom Cards -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             @forelse($classrooms as $classroom)
-                                <div class="bg-white shadow-md rounded-lg p-4 flex flex-col items-center break-words">
-                                    <a href="{{ route('classrooms.show', $classroom) }}" class="font-bold text-lg hover:underline text-center break-words">
+                                <div class="bg-white dark:bg-gray-700 shadow-md rounded-lg p-4 flex flex-col items-center break-words">
+                                    <a href="{{ route('classrooms.show', $classroom) }}" class="font-bold text-lg hover:underline text-center break-words text-gray-900 dark:text-gray-100">
                                         {{ $classroom->name }}
                                     </a>
                                 </div>
                             @empty
-                                <p>You are not in any classrooms yet.</p>
+                                <p class="text-gray-900 dark:text-gray-200">You are not in any classrooms yet.</p>
                             @endforelse
                         </div>
                     @endif

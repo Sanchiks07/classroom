@@ -1,10 +1,10 @@
 <x-app-layout>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="container mx-auto p-6">
                     <div class="flex justify-between items-center mb-6">
-                        <h1 class="text-2xl font-bold">Users</h1>
+                        <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-200">Users</h1>
                         <a href="{{ route('admin.users.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md shadow font-semibold">
                             Add User
                         </a>
@@ -13,11 +13,11 @@
                     @if($users->count())
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                             @foreach($users as $user)
-                                <div class="bg-white shadow-md rounded-lg p-4 flex flex-col justify-between hover:shadow-lg transition-shadow">
+                                <div class="bg-white dark:bg-gray-700 shadow-md rounded-lg p-4 flex flex-col justify-between hover:shadow-lg transition-shadow">
                                     <div>
-                                        <h2 class="font-semibold text-lg mb-1">{{ $user->username }}</h2>
-                                        <p class="text-gray-600 text-sm mb-1">{{ $user->email }}</p>
-                                        <span class="inline-block bg-gray-200 text-gray-700 px-2 py-1 rounded-full text-xs">{{ ucfirst($user->role) }}</span>
+                                        <h2 class="font-semibold text-lg mb-1 text-gray-900 dark:text-gray-200">{{ $user->username }}</h2>
+                                        <p class="text-gray-600 dark:text-gray-300 text-sm mb-1">{{ $user->email }}</p>
+                                        <span class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-2 py-1 rounded-full text-xs">{{ ucfirst($user->role) }}</span>
                                     </div>
 
                                     <div class="mt-4 flex gap-2">
@@ -38,7 +38,7 @@
                             @endforeach
                         </div>
                     @else
-                        <p class="text-gray-500">No users yet.</p>
+                        <p class="text-gray-500 dark:text-gray-300">No users yet.</p>
                     @endif
                 </div>
             </div>
