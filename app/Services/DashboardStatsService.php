@@ -53,13 +53,11 @@ class DashboardStatsService
                 Classroom::where('teacher_id', $user->id)->pluck('id')
             )->pluck('id')
         )->whereNull('grade')->count();
-        $commentsWritten = Comment::where('user_id', $user->id)->count();
 
         return [
             'Classes' => $classes,
             'Assignments' => $assignments,
             'Submissions to grade' => $submissionsToGrade,
-            'Comments written' => $commentsWritten,
         ];
     }
 

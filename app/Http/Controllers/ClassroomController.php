@@ -86,18 +86,26 @@ class ClassroomController extends Controller
 
     public function join(Request $request)
     {
-        $classroom = Classroom::where('code', $request->code)->firstOrFail();
-        $classroom->students()->syncWithoutDetaching(auth()->id());
-
-        // Action log
-        ActionLog::create([
-            'user_id' => auth()->id(),
-            'action' => 'joined',
-            'target_type' => 'Classroom',
-            'target_id' => $classroom->id,
-            'description' => 'Joined classroom "' . $classroom->name . '" using code ' . $classroom->code,
+        $request->validate([
+            'code' => 'required|string',
         ]);
 
-        return redirect()->route('classrooms.index');
+        $classroom = Classroom::where('code', $request->code)->first();
+
+        if (!$classroom) {
+            return back()
+                ->withErrors(['code' => 'Invalid classroom code.'])
+                ->withInput();
+        }
+
+        // Prevent duplicate joins
+        if ($classroom->students()->where('user_id', auth()->id())->exists()) {
+            return back()
+                ->withErrors(['code' => 'You are already in this classroom.']);
+        }
+
+        $classroom->students()->attach(auth()->id());
+
+        return back()->with('success', 'Successfully joined the classroom.');
     }
 }

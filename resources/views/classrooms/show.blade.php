@@ -3,6 +3,17 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg sm:rounded-lg">
                 <div class="container mx-auto p-4 sm:p-6">
+                    <!-- Errors -->
+                    @if ($errors->any())
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+                            <ul class="list-disc list-inside text-sm">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    
                     <h1 class="text-2xl font-bold mb-3 assignment-title text-gray-900 dark:text-gray-200 break-words">{{ $classroom->name }}</h1>
 
                     <p class="mb-2 sm:text-base text-gray-900 dark:text-gray-200">

@@ -3,7 +3,6 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="card-enhanced overflow-hidden sm:rounded-xl p-8">
                 <div class="container mx-auto p-6">
-
                     @php
                         $colorSets = [
                             ['bg-red-400','text-red-900','dark:bg-red-500','dark:text-white'],
@@ -27,14 +26,25 @@
                         ];
                     @endphp
 
+                    <!-- Errors -->
+                    @if ($errors->any())
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+                            <ul class="list-disc list-inside text-sm">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <!-- Teacher View -->
                     @if(auth()->user()->role === 'teacher')
                         <h1 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-200">Your Classrooms</h1>
 
                         <form method="POST" action="{{ route('classrooms.store') }}" class="mb-8 flex flex-wrap gap-3 items-start">
                             @csrf
-                            <input type="text" name="name" placeholder="Classroom name" 
-                                   class="input-enhanced w-full sm:w-64" required>
+
+                            <input type="text" name="name" placeholder="Classroom name" class="input-enhanced w-full sm:w-64" required>
                             <button type="submit" class="btn-primary w-full sm:w-auto">
                                 Create Classroom
                             </button>
@@ -69,6 +79,7 @@
                                         @method('PUT')
 
                                         <input type="text" name="name" value="{{ $classroom->name }}" class="border rounded px-2 py-1 w-full sm:w-full focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:text-gray-200">
+                                        
                                         <div class="flex justify-center flex-wrap gap-2 mt-2">
                                             <button type="submit" class="bg-white/80 dark:bg-gray-800/80 px-2 py-1 rounded text-green-600 hover:underline font-semibold">
                                                 Save
@@ -108,6 +119,7 @@
                             @csrf
 
                             <input type="text" name="code" placeholder="Classroom code" class="input-enhanced w-full sm:w-64" required>
+
                             <button type="submit" class="btn-primary w-full sm:w-auto">
                                 Join Classroom
                             </button>
@@ -141,7 +153,6 @@
                             @endforelse
                         </div>
                     @endif
-
                 </div>
             </div>
         </div>

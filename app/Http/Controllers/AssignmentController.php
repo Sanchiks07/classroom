@@ -14,12 +14,17 @@ class AssignmentController extends Controller
 {
     public function store(Request $request, Classroom $classroom)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'due_date' => 'nullable|date',
-            'file_path' => 'nullable|file',
-        ]);
+        $request->validate(
+            [
+                'title' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'due_date' => 'nullable|date|after_or_equal:today',
+                'file_path' => 'nullable|file',
+            ],
+            [
+                'due_date.after_or_equal' => 'The due date cannot be in the past.',
+            ]
+        );
 
         $data = [
             'title' => $request->title,
@@ -59,12 +64,17 @@ class AssignmentController extends Controller
 
     public function update(Request $request, Assignment $assignment)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'due_date' => 'nullable|date',
-            'file_path' => 'nullable|file',
-        ]);
+        $request->validate(
+            [
+                'title' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'due_date' => 'nullable|date|after_or_equal:today',
+                'file_path' => 'nullable|file',
+            ],
+            [
+                'due_date.after_or_equal' => 'The due date cannot be in the past.',
+            ]
+        );
 
         $assignment->title = $request->title;
         $assignment->description = $request->description;
