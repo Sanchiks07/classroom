@@ -1,3 +1,272 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Global Styling Enhancements */
+@layer base {
+    body {
+        @apply antialiased;
+    }
+    
+    html:not(.dark) body {
+        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%);
+        background-attachment: fixed;
+    }
+
+    html.dark body {
+        background: linear-gradient(135deg, #2d1b4e 0%, #1a0f2e 100%);
+        background-attachment: fixed;
+    }
+
+    /* Nature pattern overlay */
+    html:not(.dark) body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: 
+            radial-gradient(circle at 20% 50%, rgba(129, 199, 132, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(102, 187, 106, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 20%, rgba(76, 175, 80, 0.08) 0%, transparent 50%);
+        pointer-events: none;
+        z-index: 0;
+    }
+    
+    html.dark body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: 
+            radial-gradient(circle at 20% 50%, rgba(156, 39, 176, 0.12) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(142, 36, 170, 0.12) 0%, transparent 50%),
+            radial-gradient(circle at 40% 20%, rgba(123, 31, 162, 0.10) 0%, transparent 50%);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    body > div {
+        position: relative;
+        z-index: 1;
+    }
+}
+
+@layer components {
+    /* Enhanced Buttons */
+    .btn-primary {
+        @apply bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 
+               dark:from-purple-500 dark:to-violet-600 dark:hover:from-purple-600 dark:hover:to-violet-700
+               text-white font-semibold px-6 py-3 rounded-lg shadow-lg 
+               transform transition-all duration-200 hover:scale-105 hover:shadow-xl
+               focus:outline-none focus:ring-2 focus:ring-green-400 dark:focus:ring-purple-400 focus:ring-offset-2;
+    }
+
+    .btn-secondary {
+        @apply bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300
+               dark:from-gray-700 dark:to-gray-800 dark:hover:from-gray-600 dark:hover:to-gray-700
+               text-gray-700 dark:text-gray-200 font-semibold px-6 py-3 rounded-lg shadow-md
+               transform transition-all duration-200 hover:scale-105
+               focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2;
+    }
+
+    /* Enhanced Inputs */
+    .input-enhanced {
+        @apply border-2 border-green-300 dark:border-purple-600 rounded-lg px-4 py-3
+               bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+               focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-purple-500 focus:border-transparent
+               transition-all duration-200 shadow-sm hover:shadow-md;
+    }
+
+    /* Enhanced Cards */
+    .card-enhanced {
+        @apply bg-white/95 dark:bg-gray-800/95 rounded-xl shadow-lg
+               border border-green-200 dark:border-purple-700/50
+               backdrop-blur-sm
+               transition-all duration-300 hover:shadow-2xl;
+    }
+
+    /* Navigation Enhancement */
+    nav {
+        @apply backdrop-blur-md bg-white/90 dark:bg-gray-900/90 shadow-md;
+    }
+}
+
+/* Enhanced Classroom Card Styles */
+@layer components {
+    .classroom-card {
+        position: relative;
+        overflow: hidden;
+        transform: translateY(0);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        backdrop-filter: blur(10px);
+        border: 2px solid transparent;
+    }
+
+    .classroom-card::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, 
+            rgba(255,255,255,0.3) 0%, 
+            rgba(255,255,255,0.1) 50%, 
+            rgba(255,255,255,0.3) 100%);
+        border-radius: 0.75rem;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .classroom-card:hover {
+        transform: translateY(-12px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .classroom-card:hover::before {
+        opacity: 1;
+    }
+
+    .classroom-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, 
+            transparent, 
+            rgba(255, 255, 255, 0.3), 
+            transparent);
+        transition: left 0.5s ease;
+    }
+
+    .classroom-card:hover::after {
+        left: 100%;
+    }
+
+    /* Animated gradient borders */
+    @keyframes borderGlow {
+        0%, 100% { opacity: 0.5; }
+        50% { opacity: 1; }
+    }
+
+    .classroom-card:hover {
+        animation: none;
+    }
+
+    /* Floating animation for cards */
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-5px); }
+    }
+
+    .classroom-card:nth-child(odd) {
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .classroom-card:nth-child(even) {
+        animation: float 6s ease-in-out infinite;
+        animation-delay: -3s;
+    }
+
+    /* Enhanced text styling */
+    .classroom-name a {
+        background: linear-gradient(120deg, currentColor, currentColor);
+        background-size: 0% 2px;
+        background-repeat: no-repeat;
+        background-position: 0 100%;
+        transition: background-size 0.3s ease;
+        display: inline-block;
+    }
+
+    .classroom-name a:hover {
+        background-size: 100% 2px;
+    }
+
+    /* Corner accent */
+    .classroom-card .corner-accent {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 50px 50px 0;
+        border-color: transparent rgba(255, 255, 255, 0.2) transparent transparent;
+        transition: border-width 0.3s ease;
+    }
+
+    .classroom-card:hover .corner-accent {
+        border-width: 0 60px 60px 0;
+    }
+}
+
+/* Page Transitions */
+@layer utilities {
+    .page-enter {
+        animation: pageEnter 0.5s ease-out;
+    }
+
+    @keyframes pageEnter {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Enhanced Scrollbar */
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    html:not(.dark) ::-webkit-scrollbar-track {
+        @apply bg-green-100;
+    }
+    
+    html.dark ::-webkit-scrollbar-track {
+        @apply bg-gray-900;
+    }
+
+    html:not(.dark) ::-webkit-scrollbar-thumb {
+        @apply bg-gradient-to-b from-green-400 to-emerald-600 rounded-full;
+    }
+    
+    html.dark ::-webkit-scrollbar-thumb {
+        @apply bg-gradient-to-b from-purple-400 to-violet-600 rounded-full;
+    }
+
+    html:not(.dark) ::-webkit-scrollbar-thumb:hover {
+        @apply from-green-500 to-emerald-700;
+    }
+    
+    html.dark ::-webkit-scrollbar-thumb:hover {
+        @apply from-purple-500 to-violet-700;
+    }
+
+    /* Thin scrollbar for calendar cells */
+    .scrollbar-thin::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .scrollbar-thin::-webkit-scrollbar-track {
+        @apply bg-transparent;
+    }
+
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+        @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+    }
+}
+
+

@@ -1,29 +1,29 @@
 <x-app-layout>
-    <div class="py-12">
+    <div class="py-12 page-enter">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg sm:rounded-lg">
+            <div class="card-enhanced overflow-hidden sm:rounded-xl p-8">
                 <div class="container mx-auto p-6">
 
                     @php
                         $colorSets = [
-                            ['bg-red-100','text-red-800','dark:bg-red-600','dark:text-red-100'],
-                            ['bg-orange-100','text-orange-800','dark:bg-orange-600','dark:text-orange-100'],
-                            ['bg-amber-100','text-amber-800','dark:bg-amber-600','dark:text-amber-100'],
-                            ['bg-yellow-100','text-yellow-800','dark:bg-yellow-600','dark:text-yellow-100'],
-                            ['bg-lime-100','text-lime-800','dark:bg-lime-600','dark:text-lime-100'],
-                            ['bg-green-100','text-green-800','dark:bg-green-600','dark:text-green-100'],
-                            ['bg-emerald-100','text-emerald-800','dark:bg-emerald-600','dark:text-emerald-100'],
-                            ['bg-teal-100','text-teal-800','dark:bg-teal-600','dark:text-teal-100'],
-                            ['bg-cyan-100','text-cyan-800','dark:bg-cyan-600','dark:text-cyan-100'],
-                            ['bg-sky-100','text-sky-800','dark:bg-sky-600','dark:text-sky-100'],
-                            ['bg-blue-100','text-blue-800','dark:bg-blue-600','dark:text-blue-100'],
-                            ['bg-indigo-100','text-indigo-800','dark:bg-indigo-600','dark:text-indigo-100'],
-                            ['bg-violet-100','text-violet-800','dark:bg-violet-600','dark:text-violet-100'],
-                            ['bg-purple-100','text-purple-800','dark:bg-purple-600','dark:text-purple-100'],
-                            ['bg-fuchsia-100','text-fuchsia-800','dark:bg-fuchsia-600','dark:text-fuchsia-100'],
-                            ['bg-pink-100','text-pink-800','dark:bg-pink-600','dark:text-pink-100'],
-                            ['bg-rose-100','text-rose-800','dark:bg-rose-600','dark:text-rose-100'],
-                            ['bg-slate-100','text-slate-800','dark:bg-slate-600','dark:text-slate-100'],
+                            ['bg-red-400','text-red-900','dark:bg-red-500','dark:text-white'],
+                            ['bg-orange-400','text-orange-900','dark:bg-orange-500','dark:text-white'],
+                            ['bg-amber-400','text-amber-900','dark:bg-amber-500','dark:text-white'],
+                            ['bg-yellow-400','text-yellow-900','dark:bg-yellow-500','dark:text-white'],
+                            ['bg-lime-400','text-lime-900','dark:bg-lime-500','dark:text-white'],
+                            ['bg-green-400','text-green-900','dark:bg-green-500','dark:text-white'],
+                            ['bg-emerald-400','text-emerald-900','dark:bg-emerald-500','dark:text-white'],
+                            ['bg-teal-400','text-teal-900','dark:bg-teal-500','dark:text-white'],
+                            ['bg-cyan-400','text-cyan-900','dark:bg-cyan-500','dark:text-white'],
+                            ['bg-sky-400','text-sky-900','dark:bg-sky-500','dark:text-white'],
+                            ['bg-blue-400','text-blue-900','dark:bg-blue-500','dark:text-white'],
+                            ['bg-indigo-400','text-indigo-900','dark:bg-indigo-500','dark:text-white'],
+                            ['bg-violet-400','text-violet-900','dark:bg-violet-500','dark:text-white'],
+                            ['bg-purple-400','text-purple-900','dark:bg-purple-500','dark:text-white'],
+                            ['bg-fuchsia-400','text-fuchsia-900','dark:bg-fuchsia-500','dark:text-white'],
+                            ['bg-pink-400','text-pink-900','dark:bg-pink-500','dark:text-white'],
+                            ['bg-rose-400','text-rose-900','dark:bg-rose-500','dark:text-white'],
+                            ['bg-slate-400','text-slate-900','dark:bg-slate-500','dark:text-white'],
                         ];
                     @endphp
 
@@ -31,11 +31,11 @@
                     @if(auth()->user()->role === 'teacher')
                         <h1 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-200">Your Classrooms</h1>
 
-                        <form method="POST" action="{{ route('classrooms.store') }}" class="mb-6 flex flex-wrap gap-2 items-start">
+                        <form method="POST" action="{{ route('classrooms.store') }}" class="mb-8 flex flex-wrap gap-3 items-start">
                             @csrf
                             <input type="text" name="name" placeholder="Classroom name" 
-                                   class="border rounded px-3 py-2 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-gray-200" required>
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded shadow w-full sm:w-auto">
+                                   class="input-enhanced w-full sm:w-64" required>
+                            <button type="submit" class="btn-primary w-full sm:w-auto">
                                 Create Classroom
                             </button>
                         </form>
@@ -47,12 +47,21 @@
                                     $cardClasses = implode(' ', $colorSets[$colorIndex]);
                                 @endphp
 
-                                <div id="classroom-{{ $classroom->id }}" class="{{ $cardClasses }} shadow-md rounded-lg p-4 flex flex-col items-center break-words">
+                                <div id="classroom-{{ $classroom->id }}" class="classroom-card {{ $cardClasses }} shadow-md rounded-lg p-6 flex flex-col items-center break-words relative">
+                                    <div class="corner-accent"></div>
                                     
-                                    <div class="classroom-name text-center w-full">
-                                        <a href="{{ route('classrooms.show', $classroom) }}" class="font-bold hover:underline text-lg break-words">
+                                    <div class="classroom-name text-center w-full mb-3">
+                                        <a href="{{ route('classrooms.show', $classroom) }}" class="font-bold text-xl hover:underline break-words">
                                             {{ $classroom->name }}
                                         </a>
+                                    </div>
+
+                                    <div class="text-sm opacity-75 mb-2">
+                                        <span class="font-medium">Teacher:</span> {{ $classroom->teacher->username }}
+                                    </div>
+
+                                    <div class="text-sm opacity-75 mb-4">
+                                        <span class="font-medium">Assignments:</span> {{ $classroom->assignments_count }}
                                     </div>
 
                                     <form method="POST" action="{{ route('classrooms.update', $classroom) }}" class="mt-4 classroom-edit-form hidden flex flex-col gap-2 w-full">
@@ -95,11 +104,11 @@
                     @if(auth()->user()->role === 'student')
                         <h1 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-200">Your Classrooms</h1>
 
-                        <form method="POST" action="{{ route('classrooms.join') }}" class="mb-6 flex flex-wrap gap-2 items-start">
+                        <form method="POST" action="{{ route('classrooms.join') }}" class="mb-8 flex flex-wrap gap-3 items-start">
                             @csrf
 
-                            <input type="text" name="code" placeholder="Classroom code" class="border rounded px-3 py-2 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-gray-200" required>
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded shadow w-full sm:w-auto">
+                            <input type="text" name="code" placeholder="Classroom code" class="input-enhanced w-full sm:w-64" required>
+                            <button type="submit" class="btn-primary w-full sm:w-auto">
                                 Join Classroom
                             </button>
                         </form>
@@ -111,8 +120,19 @@
                                     $cardClasses = implode(' ', $colorSets[$colorIndex]);
                                 @endphp
                                 
-                                <div class="{{ $cardClasses }} shadow-md rounded-lg p-4 flex flex-col items-center break-words">
-                                    <a href="{{ route('classrooms.show', $classroom) }}" class="font-bold text-lg hover:underline text-center break-words">
+                                <div class="classroom-card {{ $cardClasses }} shadow-md rounded-lg p-6 flex flex-col items-center break-words relative">
+                                    <div class="corner-accent"></div>
+                                    <a href="{{ route('classrooms.show', $classroom) }}" class="font-bold text-xl hover:underline text-center break-words mb-3">
+                                        {{ $classroom->name }}
+                                    </a>
+
+                                    <div class="text-sm opacity-75 mb-2">
+                                        <span class="font-medium">Teacher:</span> {{ $classroom->teacher->username }}
+                                    </div>
+
+                                    <div class="text-sm opacity-75">
+                                        <span class="font-medium">Assignments:</span> {{ $classroom->assignments_count }}
+                                    </div>
                                         {{ $classroom->name }}
                                     </a>
                                 </div>

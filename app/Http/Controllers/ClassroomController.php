@@ -14,8 +14,8 @@ class ClassroomController extends Controller
         $user = auth()->user();
 
         $classrooms = $user->role === 'teacher'
-            ? $user->classroomsTeaching
-            : $user->classrooms;
+            ? $user->classroomsTeaching()->withCount('assignments')->with('teacher')->get()
+            : $user->classrooms()->withCount('assignments')->with('teacher')->get();
 
         return view('classrooms.index', compact('classrooms'));
     }
