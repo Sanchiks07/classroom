@@ -8,19 +8,16 @@
                 </h1>
 
                 <div class="flex justify-between items-center mb-4 sm:mb-6 flex-wrap gap-2 sm:gap-3">
-                    <a href="{{ route('calendar.index', ['month' => $prevMonth->month, 'year' => $prevMonth->year]) }}"
-                    class="btn-primary px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base flex-1 sm:flex-initial min-w-[100px] text-center">
-                    ← Previous
+                    <a href="{{ route('calendar.index', ['month' => $prevMonth->month, 'year' => $prevMonth->year]) }}" class="btn-primary px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base flex-1 sm:flex-initial min-w-[100px] text-center">
+                        ← Previous
                     </a>
                     
-                    <a href="{{ route('calendar.index') }}"
-                    class="btn-secondary px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base hidden sm:inline-block">
-                    Today
+                    <a href="{{ route('calendar.index') }}" class="btn-secondary px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base hidden sm:inline-block">
+                        Today
                     </a>
                     
-                    <a href="{{ route('calendar.index', ['month' => $nextMonth->month, 'year' => $nextMonth->year]) }}"
-                    class="btn-primary px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base flex-1 sm:flex-initial min-w-[100px] text-center">
-                    Next →
+                    <a href="{{ route('calendar.index', ['month' => $nextMonth->month, 'year' => $nextMonth->year]) }}" class="btn-primary px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base flex-1 sm:flex-initial min-w-[100px] text-center">
+                        Next →
                     </a>
                 </div>
 
@@ -55,23 +52,33 @@
                                         $classroomId = $assignment['classroom_id'];
                                         $colorClass = $colors[$classroomId % count($colors)];
                                     @endphp
-                                    <div class="{{ $colorClass }} text-[8px] sm:text-xs lg:text-sm rounded px-1 sm:px-2 py-0.5 sm:py-1 truncate shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-                                         title="{{ $assignment['title'] }} - {{ $assignment['classroom_name'] ?? '' }}">
-                                        <div class="font-medium truncate">{{ $assignment['title'] }}</div>
+
+                                    <a
+                                        href="{{ route('assignments.show', $assignment['id']) }}"
+                                        class="{{ $colorClass }} block text-[8px] sm:text-xs lg:text-sm rounded px-1 sm:px-2 py-0.5 sm:py-1 truncate shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                                        title="{{ $assignment['title'] }} - {{ $assignment['classroom_name'] ?? '' }}"
+                                    >
+                                        <div class="font-medium truncate">
+                                            {{ $assignment['title'] }}
+                                        </div>
+
                                         @if(isset($assignment['classroom_name']))
-                                            <div class="text-[7px] sm:text-[10px] lg:text-xs opacity-75 truncate hidden sm:block">{{ $assignment['classroom_name'] }}</div>
+                                            <div class="text-[7px] sm:text-[10px] lg:text-xs opacity-75 truncate hidden sm:block">
+                                                {{ $assignment['classroom_name'] }}
+                                            </div>
                                         @endif
-                                    </div>
+                                    </a>
                                 @endforeach
                             </div>
                         </div>
                     @endforeach
                 </div>
 
-                <!-- Mobile Assignment List (supplementary) -->
+                <!-- Mobile Assignment List -->
                 <div class="sm:hidden mt-6 space-y-3">
                     <h2 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-3">Assignments This Month</h2>
                     @php $mobileHasAssignments = false; @endphp
+
                     @foreach($days as $day)
                         @php
                             $currentDate = $day->format('Y-m-d');
@@ -84,6 +91,7 @@
                             <div class="card-enhanced rounded-lg p-4 {{ $currentDate == $today ? 'ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/20' : '' }}">
                                 <div class="font-bold text-base mb-3 text-gray-800 dark:text-gray-100">
                                     {{ $day->format('D, M j') }}
+
                                     @if($currentDate == $today)
                                         <span class="text-xs bg-blue-500 text-white px-2 py-1 rounded-full ml-2">Today</span>
                                     @endif
@@ -95,8 +103,10 @@
                                             $classroomId = $assignment['classroom_id'];
                                             $colorClass = $colors[$classroomId % count($colors)];
                                         @endphp
+
                                         <div class="{{ $colorClass }} rounded-lg p-3 shadow-sm">
                                             <div class="font-semibold text-sm">{{ $assignment['title'] }}</div>
+
                                             @if(isset($assignment['classroom_name']))
                                                 <div class="text-xs opacity-75 mt-1">{{ $assignment['classroom_name'] }}</div>
                                             @endif

@@ -35,7 +35,7 @@ class ProfileController extends Controller
         // Handle profile photo
         if ($request->hasFile('profile_photo')) {
             $request->validate([
-                'profile_photo' => 'image|max:1024',
+                'profile_photo' => 'image|max:5024',
             ]);
 
             // Store the uploaded file in storage/app/public/profile-photos

@@ -34,7 +34,7 @@
 
                     <!-- Navigation -->
                     <nav class="mb-6">
-                        <ul class="flex gap-6 text-sm whitespace-nowrap">
+                        <ul class="flex gap-6 text-sm">
                             <li>
                                 <a href="{{ route('classrooms.show', [$classroom, 'tab' => 'assignments']) }}"
                                    class="pb-2 border-b-2 
@@ -61,10 +61,7 @@
                         <h2 class="text-lg mb-4 sm:text-xl font-semibold text-gray-900 dark:text-gray-200">Assignments</h2>
 
                         @if(auth()->user()->role === 'teacher')
-                            <form method="POST"
-                                  action="{{ route('assignments.store', $classroom) }}"
-                                  enctype="multipart/form-data"
-                                  class="mb-5 mt-5 rounded-lg space-y-3 w-full sm:max-w-md">
+                            <form method="POST" action="{{ route('assignments.store', $classroom) }}" enctype="multipart/form-data" class="mb-5 mt-5 rounded-lg space-y-3 w-full sm:max-w-md">
                                 @csrf
 
                                 <h3 class="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100 mb-1">
