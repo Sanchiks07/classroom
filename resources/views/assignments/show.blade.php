@@ -83,17 +83,18 @@
 
                     <!-- Teacher: Submissions Grading -->
                     @if(auth()->user()->role === 'teacher')
+                        <hr class="my-8 border-gray-300 dark:border-gray-600">
+
                         <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-200">Student Submissions</h2>
                         <div class="space-y-4">
                             @forelse($assignment->submissions as $submission)
                                 <div class="rounded-lg">
                                     <div class="flex justify-between items-center">
                                         <span class="font-medium text-gray-900 dark:text-gray-200">{{ $submission->student->username }}</span>
-                                        <span class="text-gray-500 dark:text-gray-400 text-sm">{{ $submission->file_name }}</span>
                                     </div>
 
                                     <a href="{{ route('submissions.download', $submission) }}" class="text-blue-600 dark:text-blue-400 underline mt-1 inline-block">
-                                        Download
+                                        {{ $submission->file_name }}
                                     </a>
 
                                     <form method="POST" action="{{ route('submissions.grade', $submission) }}" class="mt-3 space-y-2">
@@ -120,8 +121,16 @@
                         @endphp
 
                         @if($mySubmission)
+                            <hr class="my-8 border-gray-300 dark:border-gray-600">
+                            
                             <div class="rounded-lg text-gray-900 dark:text-gray-200">
-                                <strong>Your Submission:</strong> {{ $mySubmission->file_name ?? 'N/A' }}
+                                <div>
+                                    <strong>Your Submission:</strong>
+
+                                    <a href="{{ route('submissions.download', $mySubmission) }}" class="text-blue-600 dark:text-blue-400 underline">
+                                        {{ $mySubmission->file_name }}
+                                    </a>
+                                </div>
 
                                 <div class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                                     Grade: {{ $mySubmission->grade ?? 'Not graded yet' }}<br>
@@ -129,10 +138,6 @@
                                 </div>
 
                                 <div class="flex flex-col sm:flex-row gap-2 mt-2">
-                                    <a href="{{ route('submissions.download', $mySubmission) }}" class="text-blue-600 dark:text-blue-400 underline">
-                                        Download
-                                    </a>
-
                                     <form method="POST" action="{{ route('submissions.destroy', $mySubmission) }}" onsubmit="return confirm('Are you sure you want to delete this submission?')">
                                         @csrf
                                         @method('DELETE')
@@ -144,7 +149,7 @@
                                 </div>
                             </div>
                         @else
-                            <form method="POST" action="{{ route('submissions.store', $assignment) }}" enctype="multipart/form-data" class="p-4 rounded-lg flex flex-col gap-3 max-w-md dark:text-gray-200">
+                            <form method="POST" action="{{ route('submissions.store', $assignment) }}" enctype="multipart/form-data" class="rounded-lg flex flex-col gap-3 max-w-md dark:text-gray-200">
                                 @csrf
 
                                 <input type="file" name="file" required class="border rounded-md px-2 py-1 focus:ring-2 focus:ring-blue-200 focus:outline-none dark:bg-gray-700 dark:text-gray-200">

@@ -92,8 +92,7 @@
                                     </form>
 
                                     <div class="mt-4 flex justify-center flex-wrap gap-2 classroom-actions">
-                                        <button type="button" onclick="editClassroom({{ $classroom->id }})" 
-                                                class="bg-white/80 dark:bg-gray-800/80 px-2 py-1 rounded text-blue-500 hover:underline font-semibold">
+                                        <button type="button" onclick="editClassroom({{ $classroom->id }})" class="bg-white/80 dark:bg-gray-800/80 px-2 py-1 rounded text-blue-500 hover:underline font-semibold">
                                             Edit
                                         </button>
 
@@ -101,7 +100,9 @@
                                             @csrf
                                             @method('DELETE')
 
-                                            <button type="submit" class="bg-white/80 dark:bg-gray-800/80 px-2 py-1 rounded text-red-500 hover:underline font-semibold">Delete</button>
+                                            <button type="submit" class="bg-white/80 dark:bg-gray-800/80 px-2 py-1 rounded text-red-500 hover:underline font-semibold">
+                                                Delete
+                                            </button>
                                         </form>
                                     </div>
                                 </div>
@@ -145,8 +146,6 @@
                                     <div class="text-sm opacity-75">
                                         <span class="font-medium">Assignments:</span> {{ $classroom->assignments_count }}
                                     </div>
-                                        {{ $classroom->name }}
-                                    </a>
                                 </div>
                             @empty
                                 <p class="text-gray-900 dark:text-gray-200">You are not in any classrooms yet.</p>

@@ -37,7 +37,7 @@ class DashboardStatsService
         return [
             'Total assignments' => $totalAssignments,
             'Submitted' => $submitted,
-            'Pending' => $pending,
+            'Unsubmitted' => $pending,
             'Average grade' => $averageGrade ? round($averageGrade, 2) : 0,
         ];
     }
@@ -55,8 +55,8 @@ class DashboardStatsService
         )->whereNull('grade')->count();
 
         return [
-            'Classes' => $classes,
-            'Assignments' => $assignments,
+            'Total classes' => $classes,
+            'Total assignments' => $assignments,
             'Submissions to grade' => $submissionsToGrade,
         ];
     }
@@ -72,7 +72,7 @@ class DashboardStatsService
             'Total users' => $totalUsers,
             'Students' => $students,
             'Teachers' => $teachers,
-            'Classrooms' => $classrooms,
+            'Total classrooms' => $classrooms,
         ];
     }
 }
