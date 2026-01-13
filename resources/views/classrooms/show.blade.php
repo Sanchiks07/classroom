@@ -87,7 +87,7 @@
                                        class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-gray-200">
 
                                 <input type="file"
-                                       name="file"
+                                       name="file_path"
                                        class="w-full text-sm text-gray-600 dark:text-gray-300">
 
                                 <button type="submit"
