@@ -137,13 +137,22 @@
                                     Feedback: <span class="whitespace-pre-line">{{ $mySubmission->feedback ?? 'No feedback yet' }}</span>
                                 </div>
 
-                                <div class="flex flex-col sm:flex-row gap-2 mt-2">
-                                    <form method="POST" action="{{ route('submissions.destroy', $mySubmission) }}" onsubmit="return confirm('Are you sure you want to delete this submission?')">
+                                <div class="flex flex-col sm:flex-row gap-2 mt-2" id="submission-edit-{{ $mySubmission->id }}">
+                                    <form method="POST" action="{{ route('submissions.update', $mySubmission) }}" enctype="multipart/form-data" class="flex items-center gap-2">
                                         @csrf
-                                        @method('DELETE')
 
-                                        <button type="submit" class="text-red-500 hover:underline">
-                                            Delete
+                                        <input type="file" name="file" class="file-input hidden border rounded-md px-2 py-1 focus:ring-2 focus:ring-blue-200 focus:outline-none dark:bg-gray-700 dark:text-gray-200">
+
+                                        <button type="button" onclick="showSubmissionEdit({{ $mySubmission->id }})" class="edit-btn text-blue-500 hover:underline">
+                                            Edit
+                                        </button>
+
+                                        <button type="submit" class="save-btn hidden text-green-600 hover:underline">
+                                            Save
+                                        </button>
+
+                                        <button type="button" onclick="cancelSubmissionEdit({{ $mySubmission->id }})" class="cancel-btn hidden text-gray-500 hover:underline">
+                                            Cancel
                                         </button>
                                     </form>
                                 </div>
@@ -268,6 +277,23 @@
             container.querySelector('.comment-text').style.display = 'block';
             container.querySelector('.comment-actions').style.display = 'flex';
             container.querySelector('.comment-edit-form').classList.add('hidden');
+        }
+
+        // Submission edit toggle
+        function showSubmissionEdit(id) {
+            const container = document.getElementById(`submission-edit-${id}`);
+            container.querySelector('.file-input').classList.remove('hidden');
+            container.querySelector('.save-btn').classList.remove('hidden');
+            container.querySelector('.cancel-btn').classList.remove('hidden');
+            container.querySelector('.edit-btn').classList.add('hidden');
+        }
+
+        function cancelSubmissionEdit(id) {
+            const container = document.getElementById(`submission-edit-${id}`);
+            container.querySelector('.file-input').classList.add('hidden');
+            container.querySelector('.save-btn').classList.add('hidden');
+            container.querySelector('.cancel-btn').classList.add('hidden');
+            container.querySelector('.edit-btn').classList.remove('hidden');
         }
     </script>
 </x-app-layout>

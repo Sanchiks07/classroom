@@ -64,28 +64,40 @@ class SubmissionController extends Controller
         return back();
     }
 
-    public function destroy(Submission $submission)
+    public function update(Request $request, Submission $submission)
     {
+        // Only the owner (student) or a teacher can update a submission
         if ($submission->student_id !== auth()->id()) {
-            abort(403, 'Unauthorized action.');
+            abort(403);
         }
 
-        if ($submission->file_path && \Storage::exists($submission->file_path)) {
-            \Storage::delete($submission->file_path);
+        $request->validate([
+            'file' => 'nullable|file',
+        ]);
+
+        if ($request->hasFile('file')) {
+            // Delete old file if exists on the public disk
+            if ($submission->file_path && Storage::disk('public')->exists($submission->file_path)) {
+                Storage::disk('public')->delete($submission->file_path);
+            }
+
+            $uploadedFile = $request->file('file');
+            $submission->file_path = $uploadedFile->store('submissions', 'public');
+            $submission->file_name = $uploadedFile->getClientOriginalName();
         }
 
-        $submission->delete();
+        $submission->save();
 
         // Action log
         ActionLog::create([
             'user_id' => auth()->id(),
-            'action' => 'deleted',
+            'action' => 'updated',
             'target_type' => 'Submission',
             'target_id' => $submission->id,
-            'description' => 'Deleted submission "' . $submission->file_name . '" for assignment "' . $submission->assignment->title . '"',
+            'description' => 'Updated submission "' . $submission->file_name . '" for assignment "' . $submission->assignment->title . '"',
         ]);
 
-        return back()->with('success', 'Submission deleted successfully.');
+        return back()->with('success', 'Submission updated successfully.');
     }
 
     public function download(Submission $submission)

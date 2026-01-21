@@ -45,7 +45,7 @@ Route::get('/assignments/{assignment}/download', [AssignmentController::class, '
 // Submission Routes
 Route::post('/assignments/{assignment}/submit', [SubmissionController::class, 'store'])->name('submissions.store');
 Route::post('/submissions/{submission}/grade', [SubmissionController::class, 'grade'])->name('submissions.grade');
-Route::delete('/submissions/{submission}', [SubmissionController::class, 'destroy'])->name('submissions.destroy');
+Route::post('/submissions/{submission}', [SubmissionController::class, 'update'])->name('submissions.update');
 Route::get('/submissions/{submission}/download', [SubmissionController::class, 'download'])->name('submissions.download');
 
 // Comment Routes
